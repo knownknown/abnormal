@@ -1,0 +1,32 @@
+extends layout
+
+block content
+	h1 Post Question
+	form( method="post").box
+		table
+			thead
+				tr
+					td Question:
+					td Answer type:
+					td( width="99%" )
+			tbody
+				tr
+					td
+						input(type="text" , name="text", size=60)
+					td
+						select(name="type")
+							option(value="1")= "Numeric"
+							option(value="2")= "Yes/No"
+					td
+						input(type="submit", value="Post", style="float:right")
+	h1 Question List
+	ul.qlist
+		each q in qlist
+			li.box
+				=q.text
+				span.question_info
+					if ( q.type == 1 )
+						| Numeric
+					else if( q.type == 2 )
+						| Yes/No
+					| &nbsp;:&nbsp;#{q.answers} answers

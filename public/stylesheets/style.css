@@ -1,0 +1,60 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #f6f6f6;
+  color: #333;
+}
+
+.box {
+	background: white;
+	padding: 20px;
+	border: 1px solid #eee;
+}
+
+input,
+select {
+	font-size: 25px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px #666 dotted;
+}
+
+form table {
+	width: 100%;
+}
+
+#header {
+	color: red;
+	font-style: italic;
+}
+
+h1 {
+	padding: 0px 20px;
+}
+
+#wrapper {
+	width: 1024px;
+	margin: 50px auto;
+}
+
+a {
+  color: #00B7FF;
+}
+
+span.question_info {
+	float: right;
+	line-height: 14px;
+	font-size: 11px;
+	text-transform: lowercase;
+	font-family: Consolas, Monaco, Lucida Console, monospace;
+}
+
+ul.qlist {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul.qlist li {
+	margin-bottom:-1px;
+}
