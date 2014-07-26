@@ -1,12 +1,13 @@
 doctype html
 html
 	head
-		title= 'NRML'
+		title= 'nrml'
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', media='screen', href='http://openfontlibrary.org/face/dn-titling')
 	body
 		#wrapper
 			#header
-				h1 NRML
+				h1: a(href="/") nrml
 			block content
 			script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
 			script(src='/javascripts/global.js')

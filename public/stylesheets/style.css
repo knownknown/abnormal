@@ -8,13 +8,30 @@ body {
 	background: white;
 	padding: 20px;
 	border: 1px solid #eee;
+	border-radius: 3px;
 }
 
 input,
 select {
 	font-size: 20px;
-	border: 1px #666 solid;
+	border: 1px #999 solid;
 	border-width: 0px 0px 2px 0px;
+}
+
+button.yes {
+	background: #87AD03;
+	border: 1px green solid;
+	padding: 10px;
+	border-radius: 4px;
+	font-family: 'Quicksand-Regular';
+}
+
+button.no {
+	background: #F67502;
+	border: 1px red solid;
+	padding: 10px;
+	border-radius: 4px;
+	font-family: 'Quicksand-Regular';	
 }
 
 form table {
@@ -22,8 +39,12 @@ form table {
 }
 
 #header {
-	color: red;
-	font-style: italic;
+	color:  #00B7FF;
+	font-family: 'DN Titling'; 
+	font-size: 20px;
+	font-weight: normal;
+	font-style: normal; 	
+	text-align: center;
 }
 
 h1 {
@@ -47,13 +68,31 @@ span.question_info {
 	font-family: Consolas, Monaco, Lucida Console, monospace;
 }
 
-ul.qlist {
+ul.qlist,
+ul.qmain {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
 }
 
-ul.qlist li {
+@font-face {
+  font-family: 'Quicksand-Bold';
+  src: url('Quicksand-Bold.otf');
+}
+
+@font-face {
+  font-family: 'Quicksand-Regular';
+  src: url('Quicksand-Regular.otf');
+}
+
+ul.qlist li,
+ul.qmain li {
 	margin-bottom:-1px;
-	font-size: 20px;
+	font-size: 18px;
+	font-family: 'Quicksand-Bold';
+	color: #444;
+}
+
+ul.qmain li {
+	text-align: center;
 }
