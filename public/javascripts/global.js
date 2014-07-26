@@ -14,16 +14,37 @@ function loadQuestions() {
     });
 };
 
-$('#questions').on('click', '#vote', function() {
-	nextQuestion( current_questions[ ++q_ctr ] );
+
+$('#questions').on('submit', 'form', function(e) {
+	e.preventDefault();
+
+	// Figure out which button was pushed
+	var val = $(this).find("button[type=submit]:focus")[0].textContent;
+	var id = $(this).attr("id")
+	var answer;
+	if ( val == "Yes" ) {
+		answer = '1';
+	} else if ( val == "No" ) {
+		answer = '0';
+	} else if ( vall ="Submit") {
+		answer = $(this).serializeArray()[0].value;
+	}
+
+    $.getJSON( '/questions/vote/' + id + '/' + answer , function( data ) {
+		// Hide the response
+		// $('li#' + id ).html('');
+        // Populate the question
+		nextQuestion( current_questions[ ++q_ctr ] );	
+    });
 });
+
 
 function nextQuestion( q_object ) {
 	var code = '';
 	if ( q_object.type == 1 ){
-		code = '<li class="box">' + q_object.text + '<br /><br /><form method="post"><input type="text" size="3"><button type="button" id="vote">Vote!</button></form></li>';		
+		code = '<li class="box" id="' + q_object._id + '">' + q_object.text + '<br /><br /><form method="post" id="' + q_object._id + '"><input type="text" size="3" name="answer"><button type="submit">Submit</button></form></li>';		
 	} else {
-		code = '<li class="box">' + q_object.text + '<br /><br /><form method="post"><button type="button" id="vote">Yes</button><button type="button" id="vote">No</button></form></li>';		
+		code = '<li class="box" id="' + q_object._id + '">' + q_object.text + '<br /><br /><form method="post" id="' + q_object._id + '"><button type="submit" name="Yes">Yes</button><button type="submit" name="No">No</button></form></li>';		
 	}
 	
 	$( code ).prependTo("#questions").hide().slideDown();

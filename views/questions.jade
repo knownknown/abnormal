@@ -18,7 +18,7 @@ block content
 							option(value="1")= "Numeric"
 							option(value="2")= "Yes/No"
 					td
-						input(type="submit", value="Post", style="float:right")
+						input(type="submit", value="Add", style="float:right")
 	h1 Question List
 	ul.qlist
 		each q in qlist
@@ -29,4 +29,8 @@ block content
 						| Numeric
 					else if( q.type == 2 )
 						| Yes/No
-					| &nbsp;:&nbsp;#{q.answers} answers
+					| &nbsp;:&nbsp;#{q.vote_count} answers
+				br
+				| &nbsp;
+				span.question_info
+					a(href="/questions/delete/" + q._id) Delete
