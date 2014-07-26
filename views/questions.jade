@@ -2,7 +2,7 @@ extends layout
 
 block content
 	h1 Post Question
-	form( method="post").box
+	form( method="post").white_box
 		table
 			tbody
 				tr
@@ -17,7 +17,7 @@ block content
 	h1 Question List
 	ul.qlist
 		each q in qlist
-			li.box
+			li.white_box
 				=q.text
 				span.question_info
 					if ( q.type == 1 )

@@ -29,11 +29,32 @@ router.get('/delete/:id', function(req, res) {
 router.get('/vote/:id/:answer', function(req, res) {
     var db = req.db;
 	var q_id = ObjectId(req.params.id);
-	var q_answer = req.params.answer;	
+	var q_answer = parseInt( req.params.answer );	
 	var update = {'$push': { 'votes':q_answer}, '$inc': {vote_count: 1}};
 
 	db.collection('qlist').updateById( q_id , update, {safe:true, multi:false}, function(e, result){
-		res.send((result===1)?{msg:'success'}:{msg:'error'})
+		if ( result == 0 ) {
+			res.send( { msg: "ERROR" } );
+		} else {
+			var ret = db.collection('qlist').findOne({_id:q_id},function(err, doc) {
+				if (doc){
+					var all_votes = doc.votes;
+					var stats =
+						[
+						['Answer', 'Votes'],
+						['No', 0],
+						['Yes', 0],
+						];
+						
+					for ( var i = 0 ; i < all_votes.length ; i++ ) {
+						stats[ all_votes[i]+1 ][ 1 ]++;
+					}
+					res.send( stats );
+				} else {
+					res.send( { msg: "ERROR" } );
+				}
+			});
+		}
 	});
 });
 
@@ -45,7 +66,7 @@ router.post('/', function(req,res) {
 	
 	db.collection('qlist').insert({
 		"text" : qText,
-		"type" : qType,
+		"type" : parseInt(qType),
 		vote_count : 0,
 		votes : []
 	} , function(err,doc) {
