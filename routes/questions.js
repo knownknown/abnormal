@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var ObjectId = require('mongodb').ObjectID;
+var histogram = require('./histogram')
 
 // Get question listing
 router.get('/', function(req, res) {
@@ -38,18 +39,39 @@ router.get('/vote/:id/:answer', function(req, res) {
 		} else {
 			var ret = db.collection('qlist').findOne({_id:q_id},function(err, doc) {
 				if (doc){
-					var all_votes = doc.votes;
-					var stats =
-						[
-						['Answer', 'Votes'],
-						['No', 0],
-						['Yes', 0],
-						];
+					if ( doc.type == 2 ) {
+						var all_votes = doc.votes;
+						var stats = [0,0];
+						for ( var i = 0 ; i < all_votes.length ; i++ ) {
+							stats[ all_votes[i] ]++;
+						}
+						res.send( stats );
+					} else if ( doc.type == 1 ) {
+						var all_votes = doc.votes;
+						// Get min & max to determine the bins
+						var bound = [0,0];
+						bound[0] = Math.min.apply(Math, all_votes);
+						bound[1] = Math.max.apply(Math, all_votes);
+						var gap = Math.round( (bound[1] - bound[0])/10 );
 						
-					for ( var i = 0 ; i < all_votes.length ; i++ ) {
-						stats[ all_votes[i]+1 ][ 1 ]++;
+						var range = [];
+						for ( var i = bound[0] ; i <= bound[1] + gap ; i+= gap ) {
+							range.push(i);
+						}
+						
+						console.log( all_votes );
+						var stats = histogram({
+							data : all_votes,
+							i : doc.num_votes,
+							bins : range
+						});
+						
+						var count = []
+						for(var i = 0; i < stats.length; i ++){
+							count.push( stats[i].y );
+						}
+						res.send( { xval : range , yval : count } );
 					}
-					res.send( stats );
 				} else {
 					res.send( { msg: "ERROR" } );
 				}

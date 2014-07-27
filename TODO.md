@@ -1,5 +1,8 @@
 # Database
 
+integrate animated pie charts:
+http://www.chartjs.org/docs/#getting-started-creating-a-chart
+
 Every question is an object containing:
 - _id
 - question text

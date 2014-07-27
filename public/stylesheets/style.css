@@ -16,9 +16,9 @@ div.chart_div {
 
 .white_box {
 	background: white;
-	border: 1px solid #eee;
-	border-radius: 2px;
-	box-shadow: 1px 1px 2px #999;
+	border: 1px solid #ccc;
+	border-radius: 0px;
+	box-shadow: 1px 1px 7px #cecece;
 	color: #444;
 	padding: 20px;
 }
@@ -28,6 +28,14 @@ select {
 	font-size: 20px;
 	border: 1px #00B7FF solid;
 	border-width: 0px 0px 2px 0px;
+}
+
+input.qmain {
+	border: 1px #ccc solid;
+	border-width: 0px 0px 2px 0px;
+	height: 50px;
+	text-align: center;
+	margin-bottom: 5px;
 }
 
 button.yes,

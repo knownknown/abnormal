@@ -22,7 +22,7 @@ $('#questions').on('submit', 'form', function(e) {
 	var val = $(this).find("button[type=submit]:focus")[0].textContent;
 	var id = $(this).attr("id")
 	var answer;
-	var answer_bin = false;
+	var answer_bin;
 	if ( val == "Yes" ) {
 		answer = 1;
 		answer_bin = true;
@@ -31,34 +31,39 @@ $('#questions').on('submit', 'form', function(e) {
 		answer_bin = true;
 	} else if ( vall ="Submit") {
 		answer = parseInt( $(this).serializeArray()[0].value );
+		answer_bin = false;
 	}
 
     $.getJSON( '/questions/vote/' + id + '/' + answer , function( data ) {
-		// Hide the response
-		// $('form#' + id ).hide();
-		// $('form#' + id ).html( data );
-
+		$('form#' + id ).hide();
+		$('#frame_' + id ).show();
 		if ( answer_bin ) {
-			var dat_tbl = google.visualization.arrayToDataTable( data );
-
-			var options = {
-				'width':200,
-				'height':200,
-				'backgroundColor':'f6f6f6',
-				pieHole: 0.4,
-				'chartArea': {'width': '100%', 'height': '80%'},
-				colors: ['#F67502','#87AD03'],
-				legend: {position: 'none'}
+			var pieData = [
+				{ label : "No" , value : data[0], color:"#F67502" },
+				{ label : "Yes" , value : data[1], color:"#87AD03" }
+			];
+			var pieOptions = {
+				animationEasing: "easeOutSine",
+				animationSteps : 75,
+				segmentShowStroke : true
 			};
-
-			var chart = new google.visualization.PieChart(document.getElementById('frame_' + id));
-			chart.draw(dat_tbl, options);
-			chart.setSelection([{row: answer}]);
+			var canvas = document.getElementById("frame_" + id).getContext("2d");
+			new Chart(canvas).Doughnut(pieData, pieOptions);
+		} else {
+			var histData = {
+				labels : data.xval,
+				datasets : [{fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",data : data.yval }]
+			};
+			var histOptions = {
+				pointDot : false,
+				animationEasing: "easeOutSine"
+			};			
+			var canvas = document.getElementById("frame_" + id).getContext("2d");
+			new Chart(canvas).Line(histData,histOptions);
 		}
 		
-		// document.getElementById('box_' + id ).style.opacity = 0.5;
-        // Populate the question
-		nextQuestion( current_questions[ ++q_ctr ] );	
+		if ( q_ctr < current_questions.length - 1 ) nextQuestion( current_questions[ ++q_ctr ] );	
     });
 });
 
@@ -66,9 +71,9 @@ $('#questions').on('submit', 'form', function(e) {
 function nextQuestion( q_object ) {
 	var code = '';
 	if ( q_object.type == 1 ){
-		code = '<li class="clear_box" id="box_' + q_object._id + '">' + q_object.text + '<br /><br /><div id="frame_' + q_object._id + '"><form method="post" id="' + q_object._id + '"><input type="text" size="3" name="answer"><button type="submit">Submit</button></form></div></li>';		
+		code = '<li class="clear_box" id="box_' + q_object._id + '">' + q_object.text + '<br /><br /><canvas id="frame_' + q_object._id + '" class="chart_div" style="display:none" height=200 width=500></canvas><form method="post" id="' + q_object._id + '"><input type="text" size="3" name="answer" class="qmain"><br /><button type="submit" class="yes">Submit</button></form></li>';		
 	} else {
-		code = '<li class="clear_box" id="box_' + q_object._id + '">' + q_object.text + '<br /><br /><div id="frame_' + q_object._id + '" class="chart_div"><form method="post" id="' + q_object._id + '"><button type="submit" name="Yes" class="yes">Yes</button><button type="submit" name="No" class="no">No.</button></form></div></li>';		
+		code = '<li class="clear_box" id="box_' + q_object._id + '">' + q_object.text + '<br /><br /><canvas id="frame_' + q_object._id + '" class="chart_div" style="display:none" height=150 width=150></canvas><form method="post" id="' + q_object._id + '"><button type="submit" name="Yes" class="yes">Yes</button><button type="submit" name="No" class="no">No.</button></div></li>';		
 	}
 	
 	$( code ).prependTo("#questions").hide().slideDown();
